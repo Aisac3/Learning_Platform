@@ -1,17 +1,23 @@
-const express = require('express');
-const mongoose = require('mongoose');
-require('dotenv').config(); // Load environment variables
-
+const express = require("express");
+const cors = require("cors");
+const mongoose = require("mongoose");
+const apiRouter = require("./Routes");
+require("dotenv").config(); // Load environment variables
+const cookieparser=require('cookie-parser')
 const app = express();
-
-mongoose.connect(process.env.MONGO_URI)
+app.use(express.json());
+app.use(cookieparser())
+mongoose
+  .connect(process.env.MONGO_URI)
   .then(() => {
-    console.log('DB connected successfully!');
+    console.log("DB connected successfully!");
   })
   .catch((err) => {
-    console.error('DB connection error:', err);
+    console.error("DB connection error:", err);
   });
 
+app.use("/api", apiRouter);
+
 app.listen(4000, () => {
-  console.log('Server running on port 4000');
+  console.log("Server running on port 4000");
 });
