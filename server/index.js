@@ -6,7 +6,11 @@ require("dotenv").config(); // Load environment variables
 const cookieparser=require('cookie-parser')
 const app = express();
 app.use(express.json());
-app.use(cookieparser())
+app.use(cookieparser());
+app.use(cors({
+  origin: "http://localhost:5173", // or use "*" for development (not safe in production)
+  credentials: true,               // if using cookies or auth headers
+}));
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
