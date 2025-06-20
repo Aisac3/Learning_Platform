@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import axios from "axios";
+
+import { userRegister } from "../../services/userServices";
+import { toast } from "react-toastify";
 
 const Register = () => {
   const [data, setData] = useState({
@@ -13,22 +13,32 @@ const Register = () => {
     confirmpassword: "",
   });
 
-  const navigate=useNavigate()
+  const navigate = useNavigate();
 
-  const handleChange=(event)=>{
-        setData((prev)=>({...prev,[event.target.name]:event.target.value}))
-  }
-  const handleSubmit=async(event)=>{
+  const handleChange = (event) => {
+    setData((prev) => ({ ...prev, [event.target.name]: event.target.value }));
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     try {
-      event.preventDefault();
-      console.log(data,'===data')
-      const response = await axios.post('http://localhost:4000/api/v1/user/register',data)
-      console.log(response,'===response')
-      navigate('/login')
+      const res = await userRegister(data);
+      if (res?.data?.success) {
+        toast.success(res.data.message || "Registration successful!");
+        navigate("/");
+      } else {
+        toast.error(res.data.message || "Registration failed");
+      }
     } catch (error) {
-      console.log(error)
+      toast.error(
+        error?.response?.data?.error ||
+          error?.response?.data?.message ||
+          error.message ||
+          "Something went wrong"
+      );
     }
-  }
+  };
+
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <div className="bg-white shadow-md p-8 rounded-lg w-full max-w-md">
@@ -36,7 +46,7 @@ const Register = () => {
           Register
         </h1>
 
-        <form>
+        <form onSubmit={handleSubmit}>
           {/* Name */}
           <div className="mb-4">
             <label
@@ -136,7 +146,6 @@ const Register = () => {
           {/* Register Button */}
           <button
             type="submit"
-            onClick={handleSubmit}
             className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
           >
             Register
@@ -150,8 +159,6 @@ const Register = () => {
             </Link>
           </p>
         </form>
-
-        <ToastContainer />
       </div>
     </div>
   );

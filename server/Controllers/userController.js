@@ -32,7 +32,7 @@ const register = async (req, res) => {
         const token=createToken(saved._id)
         //console.log(token,'token');
         res.cookie('token',token)
-      return res.status(200).json({ message: "User Registered!!! " });
+      return res.status(200).json({ message: "User Registered!!! ",success:true });
     }
   } catch (error) {
     console.log(error);

@@ -1,10 +1,14 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { userLogin } from "../../services/userServices";
+import { useDispatch } from "react-redux";
+import { saveUser } from "../../redux/features/userSlice";
 
 const Login = () => {
+  const dispatch=useDispatch();
   const [data, setData] = useState({
     email: "",
     password: "",
@@ -16,18 +20,24 @@ const Login = () => {
     setData((prev) => ({ ...prev, [event.target.name]: event.target.value }));
   };
   const handleSubmit = async (event) => {
-    try {
+    
       event.preventDefault();
       console.log(data, "===data");
-      const response = await axios.post(
-        "http://localhost:4000/api/v1/user/login",
-        data
-      );
-      console.log(response, "===response");
-      navigate("/");
-    } catch (error) {
-      console.log(error);
-    }
+      userLogin(data).then((res)=>{
+        console.log(res)
+        toast.success("User login Successfull!!")
+        dispatch(saveUser(res.data.userExists))
+        navigate('/')
+
+      }). catch ((err)=>{
+        console.log(err);
+        toast.error(err.response.data.error,{
+          position:'top-center'
+        })
+
+      }) 
+      
+    
   };
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
