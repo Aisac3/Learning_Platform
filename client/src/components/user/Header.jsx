@@ -1,9 +1,10 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router";
+import { Link, Navigate, useNavigate } from "react-router";
 import { userLogout } from "../../services/userServices";
 import { persistor } from "../../redux/store";
 import { clearUser } from "../../redux/features/userSlice";
+import { FaCartShopping } from "react-icons/fa6";
 
 const Header = () => {
   const userData = useSelector((state) => state.user);
@@ -16,6 +17,7 @@ const dispatch=useDispatch()
       userLogout().then(()=>{
         persistor.purge()
         dispatch(clearUser())
+        navigate('/')
       })
       
     } catch (error) {
@@ -94,8 +96,10 @@ const dispatch=useDispatch()
           </svg>
         </button>
         {userData.user &&Object.keys(userData.user).length>0 ? (
-          <div className="gap-2">
+          <div className="gap-2 flex items-center space-x-3">
             <span>{userData.user.name}</span>
+            
+            <button onClick={()=>navigate('cart')}><FaCartShopping className="text-xl"/></button>
             <button className="btn" onClick={handleLogout}>Logout</button>
           </div>
         ) : (

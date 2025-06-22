@@ -15,3 +15,15 @@ export const userLogin=(data)=>{
 export const userLogout=()=>{
     return axiosInstance.post('/user/logout')
 }
+
+export const addtoCart=(courseId)=>{
+    return axiosInstance.post(`/cart/addtocart/${courseId}`)
+}
+
+export const getCartItems=()=>{
+    return axiosInstance.get('/cart/getcart')
+}
+
+export const removeCartItem=(courseId)=>{
+    return axiosInstance.delete(`/cart/removefromcart/${courseId}`)
+}

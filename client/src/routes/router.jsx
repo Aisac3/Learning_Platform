@@ -5,6 +5,7 @@ import Login from "../pages/shared/Login";
 import AboutPage from "../pages/user/AboutPage";
 import Courses from "../pages/user/Courses";
 import Homepage from "../pages/user/Homepage"
+import CartPage from "../pages/user/CartPage";
 
 export const router = createBrowserRouter([
   {
@@ -23,6 +24,10 @@ export const router = createBrowserRouter([
       {
         path: "courses",
         element: <Courses/>,
+      },
+      {
+        path: "cart",
+        element: <CartPage/>,
       },
       {
         path:'/login',
